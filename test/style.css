@@ -1,0 +1,1064 @@
+  @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Roboto&display=swap');
+
+
+  /* Add to style.css */
+  .folder-item.main-folder,
+  .folder-item.main-folder.active {
+      background-color: #e3f2fd !important;
+      border-left: 4px solid #2196F3 !important;
+  }
+
+  .main-folder {
+      background-color: #e3f2fd !important;
+      font-weight: bold !important;
+  }
+
+  :root {
+      --primary-font: 'Roboto', sans-serif;
+      --handwriting-font: 'Indie Flower', cursive;
+      --note-width: 260px;
+      --note-height: 280px;
+      --note-padding: 15px;
+  }
+
+  * {
+      box-sizing: border-box;
+  }
+
+  body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #f5f7fa;
+      overflow: hidden;
+  }
+
+  #sidebar {
+      min-width: 212px;
+      max-width: 490px;
+      background: #ffffff;
+      color: #000000;
+      padding: 15px 10px 10px 10px;
+      display: flex;
+      flex-direction: column;
+  }
+
+  #sidebar h1 {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin: 10px 0 20px 10px;
+      text-align: center;
+  }
+
+  #folder-list {
+      flex-grow: 1;
+      overflow-y: auto;
+  }
+
+  .folder-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 8px;
+      border-radius: 8px;
+      margin: 6px 0;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+      background: #ffffff;
+      color: #000000;
+      font-weight: 700;
+      border-radius: 4px;
+  }
+
+  .folder-item.active,
+  .folder-item:hover {
+      background: #1307d7;
+      color: #ffffff;
+      font-weight: 700;
+  }
+
+  .folder-name {
+      flex-grow: 1;
+      user-select: none;
+  }
+
+  .folder-delete-btn {
+      background: transparent;
+      border: none;
+      color: #ff5252;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      line-height: 24px;
+      text-align: center;
+      user-select: none;
+      transition: background-color 0.3s ease;
+  }
+
+  .folder-delete-btn:focus,
+  .folder-delete-btn:hover {
+      background-color: #ff525080;
+      color: #fff;
+  }
+
+  #new-folder-btn {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background-color: rgb(88, 88, 88);
+      color: #ffffff;
+      transition: background-color 0.3s ease;
+  }
+
+  #new-folder-btn:hover {
+      background-color: #272727;
+  }
+
+  /* Main content */
+  #main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 15px 20px;
+      overflow: hidden;
+  }
+
+  #header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #b0bec5;
+  }
+
+  #header h2 {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-weight: 600;
+      font-size: 1.8rem;
+      color: #37474f;
+  }
+
+  #search-container {
+      position: relative;
+      width: 250px;
+  }
+
+  #search-input {
+      width: 100%;
+      padding: 8px 30px 8px 10px;
+      border-radius: 20px;
+      border: 2px solid #90a4ae;
+      outline: none;
+      font-size: 0.95rem;
+      transition: border-color 0.3s ease;
+  }
+
+  #search-input:focus {
+      border-color: #80cbc4;
+  }
+
+  #search-icon {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      color: #90a4ae;
+  }
+
+  #notes-container {
+      flex-grow: 1;
+      margin-top: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-bottom: 20px;
+  }
+
+  #add-note-btn {
+      margin-top: 10px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: none;
+      background-color: #7acfff;
+      color: #000000;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      align-self: flex-start;
+  }
+
+  #add-note-btn:hover {
+      background-color: rgb(0, 98, 122);
+      color: #ffffff;
+  }
+
+  /* Sticky Note Styling */
+  .sticky-note {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      background-color: #fffb82;
+      box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+      padding: var(--note-padding);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      transition: background-color 0.4s ease;
+      overflow: hidden;
+  }
+
+  /* Add these changes to your style.css */
+
+  .note-content {
+      overflow-y: auto;
+  }
+
+  .note-content::-webkit-scrollbar {
+      width: 6px;
+  }
+
+  .note-content::-webkit-scrollbar-thumb {
+      background-color: #b0bec5;
+      border-radius: 4px;
+  }
+
+  .feature-content {
+      margin-top: 10px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+  }
+
+  .todo-list input[type="text"] {
+      width: 80%;
+      /* Prevent overflow */
+  }
+
+  .timer-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+  }
+
+  /* Better responsive notes */
+  @media (max-width: 700px) {
+      .sticky-note {
+          width: 100%;
+          max-width: 100%;
+      }
+
+      #notes-container {
+          gap: 12px;
+      }
+  }
+
+  .sticky-note {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .sticky-note:hover {
+      transform: translate3d(3px, 3px, 3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .sticky-note.editing {
+      user-select: text;
+  }
+
+  .sticky-note .note-header {
+      background: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+  }
+
+  .sticky-note .note-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      flex-grow: 1;
+      word-break: break-word;
+      cursor: pointer;
+      outline: none;
+      min-height: 1.4em;
+      max-width: 100%;
+  }
+
+  .sticky-note .note-title[contenteditable="true"] {
+      border-bottom: 2px dashed #0631bc;
+      padding-bottom: 2px;
+      user-select: text;
+  }
+
+  .sticky-note .note-created {
+      font-size: 0.7rem;
+      color: #616161;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      white-space: nowrap;
+      opacity: 0.7;
+      user-select: text;
+  }
+
+  .sticky-note .like-btn {
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
+      color: #616161;
+      transition: color 0.3s ease;
+      margin-left: 12px;
+      user-select: none;
+  }
+
+  .sticky-note .like-btn.liked {
+      color: #e91e63;
+  }
+
+  .note-content {
+      flex-grow: 1;
+      width: 260px;
+      height: 170px;
+      margin-top: 6px;
+      outline: none;
+      word-break: break-word;
+      /* white-space: pre-wrap; */
+      overflow-y: scroll;
+      font-size: 1.05rem;
+      cursor: pointer;
+  }
+
+  .note-content[contenteditable="true"] {
+      width: 260px;
+      height: 170px;
+      border: 2px dashed #80cbc4;
+      border-radius: 6px;
+      padding: 5px;
+  }
+
+  /* Combined feature toggle button */
+  .feature-toggle-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      margin-top: 0;
+      border: none;
+      border-radius: 20px;
+      /* Keep other styles... */
+  }
+
+  .feature-toggle-btn:hover {
+      background-color: #4db6ac;
+  }
+
+  .feature-toggle-btn[aria-pressed="true"] {
+      background-color: #4db6ac;
+      color: #e0f2f1;
+  }
+
+  /* Feature content container with collapse capability */
+  .feature-content {
+      width: 270px;
+      margin-top: 10px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-size: 0.95rem;
+      max-height: 400px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .feature-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
+
+  /* To-Do List */
+  .todo-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0 0 16px 0;
+  }
+
+  .todo-list li {
+      display: flex;
+      align-items: center;
+      padding: 4px 0;
+  }
+
+  .todo-list input[type="checkbox"] {
+      margin-right: 10px;
+      cursor: pointer;
+  }
+
+  .todo-list input[type="text"] {
+      flex-grow: 1;
+      border: none;
+      border-bottom: 1px dashed #b0bec5;
+      outline: none;
+      font-size: 0.95rem;
+      padding: 2px 4px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .todo-list input[type="text"]:focus {
+      border-bottom: 2px solid #80cbc4;
+  }
+
+  .todo-list .add-todo-btn {
+      margin-top: 6px;
+      padding: 5px 10px;
+      border-radius: 10px;
+      border: none;
+      background-color: #80cbc4;
+      color: #263238;
+      cursor: pointer;
+      font-weight: 600;
+  }
+
+  .todo-list .add-todo-btn:hover {
+      background-color: #4db6ac;
+  }
+
+  /* Timer */
+  .timer-display {
+      text-align: center;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .timer-controls button {
+      cursor: pointer;
+      margin: 0 6px;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      border: none;
+      background-color: #80cbc4;
+      color: #263238;
+      transition: background-color 0.3s ease;
+  }
+
+  .timer-controls button:hover {
+      background-color: #4db6ac;
+  }
+
+  /* Bullet points */
+  .bullet-list {
+      padding-left: 20px;
+      margin: 0 0 10px 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-size: 1rem;
+  }
+
+  .bullet-list[contenteditable="true"] {
+      border: 2px dashed #80cbc4;
+      border-radius: 6px;
+      padding: 6px;
+      min-height: 100px;
+      outline: none;
+  }
+
+  .note-delete-btn:focus,
+  .note-delete-btn:hover {
+      background-color: #ff525080;
+      color: #fff;
+  }
+
+  /* Scrollbar Styling for notes container */
+  #notes-container::-webkit-scrollbar {
+      width: 8px;
+  }
+
+  #notes-container::-webkit-scrollbar-thumb {
+      background-color: #80cbc4;
+      border-radius: 6px;
+  }
+
+  /* Scrollbar Styling for todo list */
+  .todo-list::-webkit-scrollbar {
+      width: 5px;
+  }
+
+  .todo-list::-webkit-scrollbar-thumb {
+      background-color: #80cbc4;
+      border-radius: 4px;
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+      body {
+          flex-direction: column;
+          height: auto;
+          overflow: visible;
+      }
+
+      #sidebar {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          padding: 10px;
+          overflow-x: auto;
+      }
+
+      #folder-list {
+          background-color: white;
+          display: flex;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          gap: 10px;
+          flex-grow: 1;
+      }
+
+      .folder-item {
+          flex-shrink: 0;
+          min-width: 100px;
+          text-align: center;
+      }
+
+      #main-content {
+          height: calc(100vh - 120px);
+          overflow-y: auto;
+      }
+  }
+
+  /* Note options dropdown */
+  .note-dropdown {
+      position: relative;
+      display: inline-block;
+      margin-left: auto;
+  }
+
+  /* Add to .note-dropdown-content */
+  .note-dropdown-content {
+      z-index: 2147483647;
+      /* Match floating note z-index */
+  }
+
+  .note-dropbtn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #616161;
+      padding: 4px;
+      transition: color 0.3s ease;
+  }
+
+  .note-dropbtn:hover {
+      color: #80cbc4;
+  }
+
+  .note-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: white;
+      min-width: 120px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      z-index: 100;
+      padding: 6px 0;
+  }
+
+  .note-dropdown-content.show {
+      display: block;
+  }
+
+  .note-dropdown-content button {
+      width: 100%;
+      padding: 8px 12px;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      color: #37474f;
+      font-size: 0.9rem;
+  }
+
+  .note-dropdown-content button:hover {
+      background-color: #f5f5f5;
+  }
+
+  /* Add/Modify these styles */
+  .note-dropbtn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.4rem;
+      /* Increased size */
+      color: #616161 !important;
+      /* Force visible color */
+      padding: 4px;
+      transition: color 0.3s ease;
+      line-height: 1;
+      margin-left: 8px;
+      /* Add spacing */
+  }
+
+  .note-dropbtn:hover {
+      color: #80cbc4 !important;
+  }
+
+  .note-dropdown {
+      margin-left: auto;
+      /* Push to far right */
+  }
+
+  .sticky-note {
+      z-index: 1;
+      position: relative;
+      /* Needed for z-index */
+  }
+
+  .note-dropdown-content {
+      z-index: 1000;
+      /* Ensure dropdown appears above notes */
+  }
+
+  #remove {
+      background: none;
+      border: none;
+  }
+
+  /* Expanded Note View */
+  .expanded-overlay {
+      position: fixed;
+      min-width: 1000px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+  }
+
+  .expanded-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      min-width: 1000px;
+      max-width: 1000px;
+      min-height: 90vh;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+  }
+
+  .expanded-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+  }
+
+  .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0 8px;
+  }
+
+  .note-section {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+  }
+
+  .bullet-section ul {
+      padding-left: 1.5rem;
+      list-style-type: square;
+  }
+
+  /* Table styling */
+  .note-section table {
+      border-collapse: collapse;
+      margin: 1rem 0;
+      width: 100%;
+  }
+
+  .note-section td,
+  .note-section th {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+  }
+
+  .note-section tr:nth-child(even) {
+      background-color: #f2f2f2;
+  }
+
+  /* Expanded Edit Mode */
+  .editable-title {
+      font-size: 2rem;
+      font-weight: bold;
+      height: 100px;
+      border-bottom: 2px solid transparent;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+  }
+
+  .editable-title:focus {
+      border-color: #80cbc4;
+      outline: none;
+  }
+
+  .editable-content [contenteditable="true"] {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      border: 1px solid transparent;
+      border-radius: 4px;
+  }
+
+  .editable-content [contenteditable="true"]:focus {
+      border-color: #80cbc4;
+      background: rgba(128, 203, 196, 0.1);
+      outline: none;
+  }
+
+  .save-btn {
+      background: #0631bc;
+      color: #ffffff;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      font-weight: bold;
+      transition: background 0.3s ease;
+  }
+
+  .save-btn:hover {
+      background: #0c1945;
+  }
+
+  .bullet-section li {
+      position: relative;
+      padding-left: 1.5rem;
+  }
+
+  .bullet-section li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #80cbc4;
+  }
+
+  /* Formatting Tools */
+  .formatting-tools {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1rem;
+  }
+
+  .format-btn {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+  }
+
+  .format-btn:hover {
+      background: #f5f5f5;
+      border-color: #80cbc4;
+  }
+
+  .format-btn strong {
+      font-weight: 700;
+  }
+
+  .header-tools {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+  }
+
+  /* Add to style.txt */
+  .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0;
+  }
+
+  .todo-item input[type="checkbox"] {
+      margin: 0;
+      cursor: pointer;
+  }
+
+  .bullet-list {
+      margin: 8px 0;
+      padding-left: 20px;
+  }
+
+  .bullet-list li {
+      list-style-type: disc;
+  }
+
+  /* Expanded View Improvements */
+  .auto-expand-content {
+      width: 100%;
+      min-height: 300px;
+      resize: none !important;
+      border: none;
+      padding: 1rem;
+      font-family: inherit;
+      font-size: 1rem;
+      line-height: 1.5;
+  }
+
+  .editable-title {
+      width: 100%;
+      font-size: 2rem;
+      font-weight: bold;
+      border: none;
+      resize: none;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+  }
+
+  .formatting-tools {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      padding: 1rem 0;
+      border-top: 1px solid #eee;
+  }
+
+  /* Todo/Bullet Editing */
+  .auto-expand-content:focus {
+      outline: 2px solid #80cbc4;
+      outline-offset: -2px;
+  }
+
+  /* Fix z-index issues */
+  .expanded-overlay {
+      z-index: 9999;
+  }
+
+  /* Floating Note Styles */
+  .sticky-note.float {
+      position: fixed;
+      z-index: 99999;
+      cursor: move;
+      resize: both;
+      overflow: auto;
+      min-width: 200px;
+      min-height: 150px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Prevent text selection while dragging */
+  .sticky-note.float.noselect {
+      user-select: none;
+      -webkit-user-select: none;
+  }
+
+  .folder-item.floating-notes {
+      background-color: #fff9c4;
+      border: 2px dashed #ffd54f;
+  }
+
+  .folder-item.floating-notes.active {
+      background-color: #ffecb3;
+  }
+
+  /* Toast notifications */
+  /* Toast notification */
+  .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #80cbc4;
+      color: #263238;
+      padding: 12px 24px;
+      border-radius: 25px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      z-index: 10000;
+      animation: fadeInOut 3s ease;
+  }
+
+  @keyframes fadeInOut {
+      0% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(20px);
+      }
+
+      10% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+      }
+
+      90% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+      }
+
+      100% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(20px);
+      }
+  }
+
+  /* Hamburger Menu Styles */
+  .hamburger {
+      display: none;
+      cursor: pointer;
+      transition-property: opacity, filter;
+      transition-duration: 0.15s;
+      transition-timing-function: linear;
+      font: inherit;
+      color: inherit;
+      text-transform: none;
+      background-color: transparent;
+      border: 0;
+      margin: 0;
+      overflow: visible;
+      padding: 10px;
+      z-index: 1001;
+  }
+
+  .hamburger-box {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      position: relative;
+  }
+
+  .hamburger-inner {
+      display: block;
+      top: 50%;
+      margin-top: -2px;
+  }
+
+  .hamburger-inner,
+  .hamburger-inner::before,
+  .hamburger-inner::after {
+      width: 24px;
+      height: 2px;
+      background-color: #37474f;
+      border-radius: 4px;
+      position: absolute;
+      transition-property: transform;
+      transition-duration: 0.15s;
+      transition-timing-function: ease;
+  }
+
+  .hamburger-inner::before,
+  .hamburger-inner::after {
+      content: "";
+      display: block;
+  }
+
+  .hamburger-inner::before {
+      top: -8px;
+  }
+
+  .hamburger-inner::after {
+      bottom: -8px;
+  }
+
+  /* Active state */
+  .hamburger.active .hamburger-inner {
+      transform: rotate(45deg);
+  }
+
+  .hamburger.active .hamburger-inner::before {
+      transform: rotate(-90deg) translate3d(-8px, 0, 0);
+      top: 0;
+  }
+
+  .hamburger.active .hamburger-inner::after {
+      transform: rotate(90deg) translate3d(8px, 0, 0);
+      bottom: 0;
+  }
+
+  /* Sidebar Overlay */
+  .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  /* Responsive changes */
+  @media (max-width: 700px) {
+      .hamburger {
+          display: block;
+      }
+
+      #sidebar {
+          position: fixed;
+          left: -250px;
+          top: 0;
+          bottom: 0;
+          width: 250px;
+          z-index: 1000;
+          transition: left 0.3s ease;
+          overflow-y: auto;
+      }
+
+      #sidebar.sidebar-visible {
+          left: 0;
+          box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .overlay.sidebar-visible {
+          display: block;
+      }
+
+      #folder-list {
+          display: block;
+          overflow-y: auto;
+          padding: 10px 0;
+      }
+
+      .folder-item {
+          min-width: auto;
+          text-align: left;
+          margin: 8px 10px;
+      }
+
+      #main-content {
+          padding-left: 10px;
+          padding-right: 10px;
+      }
+
+      #header {
+          padding: 10px 0;
+      }
+
+      #search-container {
+          width: 180px;
+      }
+  }

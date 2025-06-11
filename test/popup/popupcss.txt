@@ -1,0 +1,72 @@
+/* Add to both popupcss.txt and contentstyle.txt */
+.floating-note {
+    opacity: 0.15;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.floating-note:hover {
+    opacity: 1;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2) !important;
+    transform: scale(1.02);
+}
+
+.note-header {
+    transition: background 0.2s ease;
+}
+
+.floating-note:hover .note-header {
+    background: #ffeb3b;
+}
+
+.note-content {
+    min-height: 180px;
+    padding: 12px;
+}
+
+.note-header {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: #ffeb3b;
+    border-radius: 6px 6px 0 0;
+    cursor: move;
+}
+
+.note-title {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 0 8px;
+    padding: 4px;
+    outline: none;
+    color: #333;
+    min-width: 120px;
+}
+
+.note-title:focus {
+    border-bottom: 2px dashed #d4b100;
+}
+
+.close-btn {
+    margin-left: auto; /* Push to right */
+    margin-right: 4px;
+    background: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.noselect {
+    user-select: none;
+    -webkit-user-select: none;
+}

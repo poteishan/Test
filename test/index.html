@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TEST</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div id="sidebar" aria-label="Folders sidebar">
+    <h1>Notes</h1>
+    <div id="folder-list" role="list" tabindex="0">
+    </div>
+    <button id="new-folder-btn" aria-label="Add new folder">+ New Folder</button>
+  </div>
+  <div class="change" id="main-content" aria-live="polite" aria-atomic="true">
+    <div id="header">
+      <button id="hamburger" class="hamburger" aria-label="Toggle sidebar">
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>
+      <h2 id="folder-title">Select a folder</h2>
+      <button id="add-note-btn" disabled aria-label="Add new note in selected folder">+ Add Note</button>
+      <div id="search-container">
+        <input type="search" id="search-input" aria-label="Search notes" placeholder="Search notes..." />
+        <span id="search-icon" aria-hidden="true">🔍</span>
+      </div>
+    </div>
+    <div id="notes-container"></div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

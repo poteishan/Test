@@ -1,0 +1,175 @@
+/* Add to both popupcss.txt and contentstyle.txt */
+/* Updated floating-note rule */
+.floating-note {
+    opacity: 0.15;
+    width: 230px;
+    min-height: 230px; /* Changed from height */
+    position: fixed; /* Crucial for dragging */
+    z-index: 2147483647; /* Ensure notes stay on top */
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    background: #fff9c4; /* Added background */
+    display: flex; /* Added for proper layout */
+    flex-direction: column; /* Added for proper layout */
+}
+
+.floating-note:hover {
+    opacity: 1;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2) !important;
+    transform: scale(1.02);
+}
+
+.folder-item.floating-notes {
+    background-color: #fff9c4;
+    border: 2px dashed #ffd54f;
+}
+
+.folder-item.floating-notes.active {
+    background-color: #ffecb3;
+}
+
+.note-header {
+    transition: background 0.2s ease;
+}
+
+.floating-note:hover .note-header {
+    background: #ffeb3b;
+}
+
+.note-content {
+    width: 300px;
+    height: 300px; 
+    margin: 0 auto;
+    padding: 12px;
+}
+
+.note-header {
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 6px 6px 0 0;
+    cursor: move;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+button:hover {
+    background: rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+.floating-note.dragging {
+    cursor: grabbing;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    transition: none;
+}
+
+.note-header {
+    cursor: grab;
+}
+
+.note-header:active {
+    cursor: grabbing;
+}
+
+.title-wrapper {
+    flex-grow: 1;
+    margin-right: 8px;
+}
+
+.note-date {
+    font-size: 0.75em;
+    color: #666;
+    margin-top: 2px;
+}
+
+.note-title {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 2px 0;
+    margin: 0;
+}
+
+.note-title:focus {
+    outline: none;
+    border-bottom: 2px dashed #d4b100;
+}
+
+/* Website-specific styling */
+.website-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 2147483647;
+}
+
+.note-controls {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.btn-save, .btn-share {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    opacity: 0.7;
+}
+
+.btn-save:hover, .btn-share:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.floating-note-saved {
+    border-left: 4px solid #ffd54f;
+    position: relative;
+}
+
+.floating-note-ribbon {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ffd54f;
+    color: #333;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    transform: rotate(15deg);
+}
+
+/* Add to both contentstyle.txt and popupcss.txt */
+.note-saved {
+  border: 2px solid #4CAF50 !important;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5) !important;
+  transition: all 0.5s ease;
+}
+
+.floating-note-ribbon {
+  position: absolute;
+  top: -5px;
+  right: 10px;
+  background: #ffd54f;
+  color: #333;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 3px;
+  z-index: 10;
+}

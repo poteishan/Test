@@ -1,0 +1,215 @@
+content/style.css code
+
+
+.floating-note {
+    position: fixed;
+    z-index: 2147483647; /* Maximum possible z-index */
+    width: 300px;
+    min-height: 200px;
+    background: #fff9c4;
+    border: 2px solid #ffeb3b;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+}
+
+.note-header {
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 6px 6px 0 0;
+    cursor: move;
+}
+
+.note-content {
+    margin-left: 3px;
+    width: 290px;
+    min-height: 210px;
+    padding: 12px;
+    outline: none;
+    overflow-y: auto;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+button:hover {
+    background: rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+.floating-note.dragging {
+    cursor: grabbing;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    transition: none;
+}
+
+.note-header {
+    cursor: grab;
+}
+
+.note-header:active {
+    cursor: grabbing;
+}
+
+content.js code
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "createNote") {
+        createFloatingNote(request.content);
+    }
+});
+
+// Load existing notes on page load
+chrome.storage.local.get(['notes'], ({ notes }) => {
+    notes?.forEach(note => createFloatingNote(note));
+});
+
+function createFloatingNote(note) {
+    // Create note container
+    const noteEl = document.createElement('div');
+    noteEl.className = 'floating-note';
+    noteEl.style.left = `${note.x}px`;
+    noteEl.style.top = `${note.y}px`;
+    noteEl.dataset.noteId = note.id;
+
+    // Note HTML structure
+    noteEl.innerHTML = `
+        <div class="note-header">
+            <input type="text" 
+                   class="note-title" 
+                   value="${note.title || 'New Note'}"
+                   placeholder="Note Title"
+                   maxlength="40"
+                   aria-label="Note title">
+            <div class="note-controls">
+                <button class="note-close" aria-label="Close note">×</button>
+            </div>
+        </div>
+        <div class="note-content" 
+             contenteditable="true" 
+             aria-label="Note content">${note.content || ''}</div>
+    `;
+
+    // Element references
+    const titleInput = noteEl.querySelector('.note-title');
+    const contentEl = noteEl.querySelector('.note-content');
+    const closeBtn = noteEl.querySelector('.note-close');
+
+    // Title editing handler
+    let titleTimeout;
+    titleInput.addEventListener('input', () => {
+        note.title = titleInput.value.trim();
+        clearTimeout(titleTimeout);
+        titleTimeout = setTimeout(() => saveNote(note), 300);
+    });
+
+    // Content editing handler
+    let contentTimeout;
+    contentEl.addEventListener('input', () => {
+        note.content = contentEl.innerHTML;
+        clearTimeout(contentTimeout);
+        contentTimeout = setTimeout(() => saveNote(note), 500);
+    });
+
+    // Close button handler
+    closeBtn.addEventListener('click', () => {
+        noteEl.remove();
+        chrome.storage.local.get(['notes'], ({ notes }) => {
+            const updatedNotes = notes.filter(n => n.id !== note.id);
+            chrome.storage.local.set({ notes: updatedNotes });
+        });
+    });
+
+    // Drag implementation
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+    
+    const header = noteEl.querySelector('.note-header');
+    header.addEventListener('mousedown', startDrag);
+    
+    function startDrag(e) {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialX = noteEl.offsetLeft;
+        initialY = noteEl.offsetTop;
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stopDrag);
+    }
+
+    function drag(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        
+        noteEl.style.left = `${initialX + dx}px`;
+        noteEl.style.top = `${initialY + dy}px`;
+    }
+
+    function stopDrag() {
+        isDragging = false;
+        note.x = parseInt(noteEl.style.left);
+        note.y = parseInt(noteEl.style.top);
+        saveNote(note);
+        
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('mouseup', stopDrag);
+    }
+
+    // Initial focus for new notes
+    if (!note.title && !note.content) {
+        setTimeout(() => titleInput.focus(), 50);
+    }
+
+    return noteEl;
+}
+
+// Storage helper
+function saveNote(note) {
+    chrome.storage.local.get(['notes'], ({ notes = [] }) => {
+        const existing = notes.findIndex(n => n.id === note.id);
+        if (existing >= 0) {
+            notes[existing] = note;
+        } else {
+            notes.push(note);
+        }
+        chrome.storage.local.set({ notes });
+    });
+}
+
+// Initialize notes on page load
+chrome.storage.local.get(['notes'], ({ notes = [] }) => {
+    notes.forEach(note => {
+        document.body.appendChild(createFloatingNote(note));
+    });
+});
+
+// Debounce helper function
+function debounce(fn, delay) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn(...args), delay);
+    };
+}
+function saveNotePosition(id, x, y) {
+    chrome.storage.local.get(['notes'], ({ notes }) => {
+        const updated = notes.map(n => n.id === id ? {...n, x, y} : n);
+        chrome.storage.local.set({ notes: updated });
+    });
+}
+
+function saveNoteContent(id, content) {
+    chrome.storage.local.get(['notes'], ({ notes }) => {
+        const updated = notes.map(n => n.id === id ? {...n, content} : n);
+        chrome.storage.local.set({ notes: updated });
+    });
+}

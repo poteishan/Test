@@ -1,0 +1,254 @@
+popup.html code
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <button id="newNote">New Note</abutton>
+    <script src="popup.js"></script>
+</body>
+</html>
+
+popup.css code
+
+.floating-note {
+    position: fixed;
+    z-index: 2147483647;
+    width: 300px;
+    min-height: 200px;
+    background: #fff9c4;
+    border: 2px solid #ffeb3b;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+}
+
+.note-header {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: #ffeb3b;
+    border-radius: 6px 6px 0 0;
+    cursor: move;
+}
+
+.note-title {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 0 8px;
+    padding: 4px;
+    outline: none;
+    color: #333;
+    min-width: 120px;
+}
+
+.note-title:focus {
+    border-bottom: 2px dashed #d4b100;
+}
+
+.close-btn {
+    background: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.note-content {
+    padding: 12px;
+    min-height: 150px;
+    outline: none;
+    overflow-y: auto;
+}
+
+.noselect {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+popup.js code
+
+// Drag functionality (same as app.js but modified for extension)
+function makeDraggable(element, note) {
+    let isDragging = false;
+    let initialX = 0;
+    let initialY = 0;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    element.querySelector('.note-header').addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+
+    function dragStart(e) {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+
+        if (e.target === element || element.contains(e.target)) {
+            isDragging = true;
+            element.classList.add('noselect');
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+            const currentX = e.clientX - initialX;
+            const currentY = e.clientY - initialY;
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            setTranslate(currentX, currentY, element);
+        }
+    }
+
+    function dragEnd(e) {
+        initialX = xOffset;
+        initialY = yOffset;
+        isDragging = false;
+        element.classList.remove('noselect');
+
+        // Save position
+        note.x = xOffset;
+        note.y = yOffset;
+        saveNote(note);
+    }
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.left = `${xPos}px`;
+        el.style.top = `${yPos}px`;
+    }
+}
+
+function saveNote(note) {
+    chrome.storage.local.get(['notes'], ({ notes }) => {
+        const updatedNotes = notes.map(n => n.id === note.id ? note : n);
+        chrome.storage.local.set({ notes: updatedNotes });
+    });
+}
+
+// Create floating note with editable title
+function createFloatingNote(note) {
+    const noteEl = document.createElement('div');
+    noteEl.className = 'floating-note';
+    noteEl.style.left = `${note.x}px`;
+    noteEl.style.top = `${note.y}px`;
+
+    noteEl.innerHTML = `
+        <div class="note-header">
+            <input type="text" 
+                   class="note-title" 
+                   value="${note.title || 'New Note'}" 
+                   maxlength="50"
+                   aria-label="Note title">
+            <button class="close-btn" aria-label="Close note">×</button>
+        </div>
+        <div class="note-content" 
+             contenteditable="true" 
+             aria-label="Note content">${note.content}</div>
+    `;
+
+    // Title handling
+    const titleInput = noteEl.querySelector('.note-title');
+    titleInput.addEventListener('input', () => {
+        note.title = titleInput.value.trim() || 'New Note';
+        saveNote(note);
+    });
+
+    // Content handling
+    const contentEl = noteEl.querySelector('.note-content');
+    contentEl.addEventListener('input', () => {
+        note.content = contentEl.innerHTML;
+        saveNote(note);
+    });
+
+    // Close button
+    noteEl.querySelector('.close-btn').addEventListener('click', () => {
+        noteEl.remove();
+        chrome.storage.local.get(['notes'], ({ notes }) => {
+            const filteredNotes = notes.filter(n => n.id !== note.id);
+            chrome.storage.local.set({ notes: filteredNotes });
+        });
+    });
+
+    // Make draggable
+    makeDraggable(noteEl, note);
+
+    // Focus title on new notes
+    if (!note.title) {
+        setTimeout(() => titleInput.focus(), 50);
+    }
+
+    return noteEl;
+}
+
+// Add these functions for title persistence
+function saveNote(note) {
+    chrome.storage.local.get(['notes'], (result) => {
+        const notes = result.notes || [];
+        const existingIndex = notes.findIndex(n => n.id === note.id);
+
+        if (existingIndex >= 0) {
+            notes[existingIndex] = note;
+        } else {
+            notes.push(note);
+        }
+
+        chrome.storage.local.set({ notes });
+    });
+}
+
+function loadNotes() {
+    chrome.storage.local.get(['notes'], (result) => {
+        (result.notes || []).forEach(note => {
+            const noteEl = createFloatingNote(note);
+            document.body.appendChild(noteEl);
+        });
+    });
+}
+
+// Load existing notes on init
+document.addEventListener('DOMContentLoaded', loadNotes);
+
+// New note creation handler
+document.getElementById('newNote').addEventListener('click', () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+        const noteId = Date.now().toString();
+        const newNote = {
+            id: noteId,
+            title: '',
+            content: '',
+            x: 100,
+            y: 100
+        };
+
+        chrome.storage.local.get(['notes'], ({ notes = [] }) => {
+            chrome.storage.local.set({ notes: [...notes, newNote] }, () => {
+                chrome.scripting.executeScript({
+                    target: { tabId: tabs[0].id },
+                    func: createFloatingNote,
+                    args: [newNote]
+                });
+            });
+        });
+    });
+});
+
+// Load existing notes on page load
+chrome.storage.local.get(['notes'], ({ notes = [] }) => {
+    notes.forEach(note => {
+        createFloatingNote(note);
+    });
+});
